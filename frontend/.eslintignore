@@ -1,0 +1,4 @@
+**/workbox-*.js
+**/*.sw.js
+**/sw.js
+**/*.spec.tsx

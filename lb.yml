@@ -1,0 +1,44 @@
+http:
+    routers:
+        frontend:
+            rule: PathPrefix(`/`)
+            service: frontend
+        frontend-next:
+            rule: PathPrefix(`/api/auth`)
+            service: frontend
+        backend-auth:
+            rule: PathPrefix(`/auth`)
+            service: backend
+        backend:
+            rule: PathPrefix(`/api`)
+            service: backend
+        backend-doc:
+            rule: PathPrefix(`/docs`)
+            service: backend
+        backend-redoc:
+            rule: PathPrefix(`/redoc`)
+            service: backend
+        db:
+            rule: PathPrefix(`/db`)
+            service: db
+        adminer:
+            rule: PathPrefix(`/adminer`)
+            service: adminer
+
+    services:
+        frontend:
+            loadBalancer:
+                servers:
+                    - url: http://frontend:3000
+        backend:
+            loadBalancer:
+                servers:
+                    - url: http://backend:80
+        db:
+            loadBalancer:
+                servers:
+                    - url: http://db:5432
+        adminer:
+            loadBalancer:
+                servers:
+                    - url: http://adminer:8080

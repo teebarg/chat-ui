@@ -1,0 +1,21 @@
+from typing import Union, Any
+
+from sqlalchemy import String
+from sqlmodel import Field, Relationship, Column
+
+from models.base import BaseModel
+
+# Shared properties
+class {{cname}}Base(BaseModel):
+    text: str = Field(sa_column=Column(String))
+
+    class Config:
+        from_attributes = True
+
+
+class {{cname}}({{cname}}Base, table=True):
+    id: int = Field(primary_key=True)
+
+
+class {{cname}}Out({{cname}}Base):
+    id: int

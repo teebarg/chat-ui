@@ -1,0 +1,46 @@
+name: Api Deployment
+
+on:
+    workflow_dispatch:
+        inputs:
+            deploy-env:
+                description: "Env to Deploy"
+                type: choice
+                default: main
+                options:
+                  - main
+                  - staging
+
+# Build the image, pust it to Docker Hub, and deploy it to the cluster
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                ref: refs/heads/${{ github.event.inputs.deploy-env }}
+
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
+
+            - name: Login to Docker Hub
+              uses: docker/login-action@v3
+              with:
+                  username: ${{ secrets.DOCKER_USERNAME }}
+                  password: ${{ secrets.DOCKER_PASSWORD }}
+
+            - name: Build and push
+              uses: docker/build-push-action@v5
+              with:
+                  push: true
+                  tags: ${{ secrets.DOCKER_USERNAME }}/project-slug:latest
+                  context: "{{defaultContext}}:backend"
+
+            - name: Deploy to Render
+              env:
+                deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+              run: |
+                echo "Branch Name: ${{ github.ref }}"
+                echo "Deploying.........."
+                curl "$deploy_url"

@@ -1,0 +1,15 @@
+*.pyc
+*.pyo
+__pycache__
+.env
+cred.json
+
+.idea/
+
+app.egg-info
+*.pyc
+.mypy_cache
+.coverage
+htmlcov
+.cache
+.venv
