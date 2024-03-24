@@ -1,11 +1,9 @@
-# Nextjs Fastapi Project Generator
+# Chat UI
 
 Author: Adeniyi Aderounmu
 Email: teebarg01@gmail.com
 
 ## 🚨 Warning: still in construction 😎 🏗️
-
-Generate a backend and frontend stack using Python, including interactive API documentation.
 
 ### Interactive API documentation
 
