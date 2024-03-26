@@ -16,4 +16,20 @@ type Pagination = {
     total_pages: number;
 };
 
-export type { User, Pagination };
+type Conversation = {
+    id: number;
+    excerpt: string;
+    slug: number;
+    created_at: string;
+    updated_at: string;
+};
+
+type Message = {
+    id: number;
+    message: string;
+    ai: boolean;
+    created_at: string;
+    updated_at: string;
+};
+
+export type { User, Pagination, Conversation, Message };

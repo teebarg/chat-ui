@@ -131,9 +131,9 @@ CurrentUser = Annotated[User, Depends(get_current_active_user)]
 
 
 def get_conversation_path_param(
-    id: str, db: SessionDep, current_user: CurrentUser
+    slug: str, db: SessionDep, current_user: CurrentUser
 ) -> Conversation:
-    if conversation := crud.conversation.get(db=db, id=id):
+    if conversation := crud.conversation.get_by_slug(db=db, slug=slug):
         return conversation
     raise HTTPException(status_code=404, detail="Conversation not found.")
 

@@ -38,6 +38,8 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER_PASSWORD: str
     USERS_OPEN_REGISTRATION: bool = False
 
+    OPENAI_API_KEY: str
+
     model_config = SettingsConfigDict(env_file=".env")
 
 

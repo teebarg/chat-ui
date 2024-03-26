@@ -1,4 +1,7 @@
 import moment from "moment";
+import { marked } from "marked";
+import hljs from "highlight.js";
+import "highlight.js/styles/default.css";
 
 function buildUrl(baseUrl: string, queryParams: Record<string, string | Date | undefined | null>): string {
     let url = baseUrl;
@@ -81,4 +84,56 @@ const imgSrc = (image: string): string => {
     return `${process.env.NEXT_PUBLIC_IMAGE_URL}/${image}?alt=media`;
 };
 
-export { buildUrl, cleanDate, currency, startOfMonth, sleep, getInitials, getGreetingMessage, endOfMonth, imgSrc };
+// const mdTextToHtml = (text: string): string => {
+//     // Set options for marked if needed
+//     marked.setOptions({
+//         renderer: new marked.Renderer(),
+//         highlight: function (code: any, lang: any) {
+//             console.log("code");
+//             console.log(code);
+//             console.log(lang);
+//             // Using highlight.js or any other library to highlight code if necessary
+//             // or return the code directly if highlighting is not needed.
+//             return hljs.highlightAuto(code).value;
+//         },
+//         // langPrefix: "language-", // prefix for language-specific classes, useful for syntax highlighting
+//         langPrefix: "", // prefix for language-specific classes, useful for syntax highlighting
+//         pedantic: false,
+//         gfm: true,
+//         breaks: true,
+//         sanitize: false,
+//         smartLists: true,
+//         smartypants: false,
+//         xhtml: false,
+//     });
+//     return marked(text);
+// };
+
+const mdTextToHtml = (text: string): string | any => {
+    // Define the language grammar for HCL (HashiCorp Configuration Language)
+    hljs.registerLanguage("hcl", function () {
+        return {
+            case_insensitive: true, // HCL is case-insensitive
+            contains: [
+                // Define your language rules here
+                // For example, keywords, strings, comments, etc.
+            ],
+        };
+    });
+    // Set options for marked if needed
+    const renderer = new marked.Renderer();
+    renderer.code = (code: string, language: string | undefined) => {
+        const highlightedCode = language ? hljs.highlight(language, code).value : code;
+        return `<pre><code class="hljs ${language}">${highlightedCode}</code></pre>`;
+    };
+
+    marked.setOptions({
+        renderer: renderer,
+        gfm: true,
+        breaks: true,
+    });
+
+    return marked(text);
+};
+
+export { buildUrl, cleanDate, currency, startOfMonth, sleep, getInitials, getGreetingMessage, endOfMonth, imgSrc, mdTextToHtml };

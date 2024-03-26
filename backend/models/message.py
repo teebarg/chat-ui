@@ -12,6 +12,7 @@ from models.conversation import Conversation
 class MessageBase(BaseModel):
     # message: Union[str, None] = None
     message: str = Field(sa_column=Column(String))
+    ai: bool = Field(default=False)
 
     class Config:
         from_attributes = True

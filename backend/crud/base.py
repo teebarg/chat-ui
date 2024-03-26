@@ -45,6 +45,12 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     def get(self, db: Session, id: Any) -> Optional[ModelType]:
         return db.get(self.model, id)
 
+    def get_by_name(self, db: Session, name: str) -> Optional[ModelType]:
+        return db.exec(select(self.model).where(self.model.name == name)).first()
+
+    def get_by_slug(self, db: Session, slug: str) -> Optional[ModelType]:
+        return db.exec(select(self.model).where(self.model.slug == slug)).first()
+
     def create(self, db: Session, *, obj_in: CreateSchemaType) -> ModelType:
         obj_in_data = jsonable_encoder(obj_in)
         db_obj = self.model(**obj_in_data)  # type: ignore

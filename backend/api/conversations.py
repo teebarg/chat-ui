@@ -44,7 +44,7 @@ async def index(
     }
 
 
-@router.get("/{id}", response_model=ConversationOut)
+@router.get("/{slug}", response_model=ConversationOut)
 async def show(conversation: deps.CurrentConversation):
     """
     Get a specific Conversation by ID.
@@ -80,9 +80,7 @@ async def create(
 
         # Get the response from OpenAI
         try:
-            oai_message = crud.conversation.call_openai(
-                messages=conversation.messages, new_message=data.message
-            )
+            oai_message = crud.conversation.call_openai(messages=conversation.messages)
             crud.message.create(
                 db=db,
                 obj_in={
@@ -92,6 +90,7 @@ async def create(
                     "user_id": user_id,
                 },
             )
+            return conversation
 
         except Exception as e:
             logging.error(f"Error processing conversation: {e}")
@@ -105,7 +104,7 @@ async def create(
         raise HTTPException(status_code=500, detail=f"An error occurred, {e}")
 
 
-@router.put("/{id}", response_model=ConversationOut)
+@router.put("/{slug}", response_model=ConversationOut)
 async def update(
     update: schemas.ConversationUpdate,
     db: deps.SessionDep,
@@ -124,7 +123,7 @@ async def update(
         raise HTTPException(status_code=500, detail=f"Error updating Conversation, {e}")
 
 
-@router.put("/{id}/message", response_model=ConversationOut)
+@router.put("/{slug}/message", response_model=ConversationOut)
 async def patch(
     payload: schemas.ConversationCreate,
     db: deps.SessionDep,
@@ -143,6 +142,22 @@ async def patch(
                 "user_id": current_user.id,
             },
         )
+        # Get the response from OpenAI
+        try:
+            oai_message = crud.conversation.call_openai(messages=conversation.messages)
+            crud.message.create(
+                db=db,
+                obj_in={
+                    "message": oai_message,
+                    "ai": True,
+                    "conversation_id": conversation.id,
+                    "user_id": current_user.id,
+                },
+            )
+            return conversation
+
+        except Exception as e:
+            logging.error(f"Error getting response from ai: {e}")
         return conversation
     except IntegrityError as e:
         raise HTTPException(
@@ -152,7 +167,7 @@ async def patch(
         raise HTTPException(status_code=500, detail=f"Error updating Conversation, {e}")
 
 
-@router.delete("/{id}", response_model=ConversationOut)
+@router.delete("/{slug}", response_model=ConversationOut)
 async def delete(db: deps.SessionDep, conversation: deps.CurrentConversation):
     """
     Delete a specific Conversation by ID.
