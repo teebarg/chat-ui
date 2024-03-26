@@ -133,3 +133,57 @@ export function MutiSelectField({ name, label, className, options, control, defa
         </div>
     );
 }
+
+export function TextAreaField({ name, register, rules, error, ...props }: FieldProps) {
+    let id = useId();
+    const formRules: Rules = {};
+    const { required } = rules || {};
+    if (required) {
+        formRules["required"] = typeof required === "boolean" ? `Textfield is required` : required;
+    }
+
+    return (
+        <div className="flex w-full items-center">
+            <div className="overflow-hidden [&:has(textarea:focus)]:border-gray-200 [&:has(textarea:focus)]:shadow-[0_2px_6px_rgba(0,0,0,.05)] flex flex-col w-full flex-grow relative border border-solid rounded-2xl bg-white/90 border-gray-300">
+                <textarea
+                    id={id}
+                    tabIndex={0}
+                    rows={1}
+                    placeholder="Message ChatGPT…"
+                    className="m-0 w-full resize-none border-0 bg-transparent outline-none py-[10px] pr-10 md:py-3.5 md:pr-12 max-h-52 placeholder-black/50 pl-3 md:pl-4"
+                    style={{ height: "52px", overflowY: "hidden" }}
+                    {...props}
+                    {...register(name, formRules)}
+                ></textarea>
+                <button
+                    disabled={error}
+                    className="absolute bottom-1.5 right-2 rounded-lg border border-black bg-black p-0.5 text-white transition-colors enabled:bg-black disabled:text-gray-400 disabled:opacity-10 md:bottom-3 md:right-3"
+                >
+                    <span className="" data-state="closed">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-white">
+                            <path
+                                d="M7 11L12 6L17 11M12 18V7"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            ></path>
+                        </svg>
+                    </span>
+                </button>
+                {/* <button type="button" className="rounded-full border-2 border-gray-950 p-1 dark:border-gray-200" aria-label="Stop generating">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 16 16"
+                        fill="currentColor"
+                        className="h-2 w-2 text-token-text-primary"
+                        height="16"
+                        width="16"
+                    >
+                        <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2z" stroke-width="0"></path>
+                    </svg>
+                </button> */}
+            </div>
+        </div>
+    );
+}

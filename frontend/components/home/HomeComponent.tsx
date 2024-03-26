@@ -6,7 +6,10 @@ import Head from "next/head";
 
 // import { ArrowPathIcon, CloudArrowUpIcon, FingerPrintIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 
-const HomeComponent = () => {
+const HomeComponent = ({ session }: { session: any }) => {
+    const isAuthenticated = session && session.user;
+    const link = isAuthenticated ? "/chat" : "/login";
+    const linkName = isAuthenticated ? "Chat Now" : "Get Started";
     return (
         <div className="bg-gray-100">
             <Head>
@@ -23,10 +26,10 @@ const HomeComponent = () => {
                             Experience the future of conversations with our AI-powered chat assistant
                         </p>
                         <Link
-                            href="/login"
+                            href={link}
                             className="px-8 py-3 font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-700 animate-fade-in-up animation-delay-600"
                         >
-                            Get Started
+                            {linkName}
                         </Link>
                     </div>
                     <div className="md:w-1/2 animate-fade-in-up animation-delay-900">
@@ -87,8 +90,8 @@ const HomeComponent = () => {
                 <div className="text-center animate-fade-in-up">
                     <h2 className="text-4xl font-bold mb-6">Join the Future of Conversations</h2>
                     <p className="text-lg text-gray-700 mb-8">Experience the power of our AI chat assistant today.</p>
-                    <Link href="/login" className="px-8 py-3 font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-700">
-                        Login
+                    <Link href={link} className="px-8 py-3 font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-700">
+                        {linkName}
                     </Link>
                 </div>
             </div>

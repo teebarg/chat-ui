@@ -33,6 +33,30 @@ export default async function ChatLayout({ children }: { children: React.ReactNo
                     <div className="fixed bg-green-600 -m-4 px-4 py-2 w-64 lg:w-80">
                         <h2 className="text-lg font-semibold text-gray-800">Chats</h2>
                     </div>
+                    {conversations.length === 0 && (
+                        <div className="flex flex-col items-center justify-center mt-12">
+                            <div className="max-w-md mx-auto text-center">
+                                <svg
+                                    className="w-20 h-20 mx-auto text-gray-400"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                                    />
+                                </svg>
+                                <h2 className="mt-6 text-2xl font-bold text-gray-800">No Available Chats</h2>
+                                <p className="mt-2 text-gray-600">
+                                    {`It looks like you don't have any active chats at the moment. Start a new conversation or check back later.`}
+                                </p>
+                            </div>
+                        </div>
+                    )}
                     <ul className="mt-10">
                         {/* Chat List */}
                         {conversations.map((conversation: Conversation, key: number) => (

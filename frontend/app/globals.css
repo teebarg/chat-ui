@@ -48,4 +48,11 @@
     .link {
         @apply text-blue-600 hover:text-blue-500 underline;
     }
+
+    .suggest {
+        @apply bg-white border border-gray-300 shadow-sm hover:border-0;
+    }
+    .icon-sm {
+        @apply stroke-2 h-4 w-4 flex-shrink-0;
+    }
 }
