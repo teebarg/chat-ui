@@ -60,7 +60,7 @@ export default function ChatInputForm({ slug }: { slug?: string }) {
 
     return (
         <form ref={form} onSubmit={handleSubmit(onSubmit)}>
-            <div className="mt-6 gap-x-6 gap-y-8">
+            <div>
                 <TextAreaField
                     name="message"
                     placeholder="Ex. Message ai....."

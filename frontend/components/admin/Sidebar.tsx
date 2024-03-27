@@ -9,8 +9,8 @@ import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import cn from "classnames";
-import { getInitials } from "@/lib/utils";
 import Logo from "@/public/logo.svg";
+import Avatar from "@/components/core/Avatar";
 
 const navigation = [
     { name: "Dashboard", path: "/admin", icon: HomeIcon },
@@ -194,20 +194,7 @@ export default function SideBar({ children }: { children: React.ReactNode }) {
                             {/* Profile dropdown */}
                             <Menu as="div" className="relative">
                                 <Menu.Button className="-m-1.5 flex items-center p-1.5">
-                                    {session?.user?.image ? (
-                                        <div className="h-8 w-8 rounded-full bg-gray-50 relative overflow-hidden">
-                                            <Image className="bg-gray-50" src={session?.user?.image || ""} alt="Avatar" fill />
-                                        </div>
-                                    ) : (
-                                        <span
-                                            style={{ backgroundColor: getInitials(session?.user?.name || "").color }}
-                                            className={`inline-flex h-10 w-10 items-center justify-center rounded-full`}
-                                        >
-                                            <span className={"font-medium leading-none text-white"}>
-                                                {getInitials(session?.user?.name || "").initials}
-                                            </span>
-                                        </span>
-                                    )}
+                                    <Avatar></Avatar>
                                     <span className="hidden lg:flex lg:items-center">
                                         <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
                                             {session?.user?.name}
