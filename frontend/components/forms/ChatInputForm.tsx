@@ -1,18 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Alert from "@/components/core/Alert";
 import { TextAreaField } from "@/components/core/Fields";
+import { Http } from "@/lib/http";
+import { signOut } from "next-auth/react";
 
 type Inputs = {
     message: string;
 };
 
-export default function ChatInputForm() {
+export default function ChatInputForm({ slug }: { slug?: string }) {
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const form = useRef<any>(null);
 
     const {
         register,
@@ -24,28 +27,25 @@ export default function ChatInputForm() {
             return;
         }
         setLoading(true);
-        console.log(data);
-        const { message } = data;
-        console.log("🚀 ~ message:", message);
         const body = JSON.stringify(data);
         try {
-            // Sign Up
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/conversation/${9}/message`, {
-                method: "POST",
-                headers: {
-                    accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-                body,
-            });
+            const path = slug ? `/conversations/${slug}/message` : `/conversations`;
+            const res = await Http(`${path}`, "POST", body);
             const data = await res.json();
             setLoading(false);
+            if (res.ok) {
+                window.location.href = `/chat/${data.slug}`;
+                return;
+            }
             setError(true);
             if (res.status === 400) {
                 setErrorMessage(data.detail);
                 return;
             } else if (res.status === 422) {
                 setErrorMessage("Please check your inputs and try again");
+                return;
+            } else if ([401, 403].includes(res.status)) {
+                signOut();
                 return;
             }
         } catch (error) {
@@ -54,8 +54,12 @@ export default function ChatInputForm() {
         }
     };
 
+    const clickSubmit = () => {
+        form?.current?.click();
+    };
+
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form ref={form} onSubmit={handleSubmit(onSubmit)}>
             <div className="mt-6 gap-x-6 gap-y-8">
                 <TextAreaField
                     name="message"
@@ -63,14 +67,8 @@ export default function ChatInputForm() {
                     register={register}
                     error={errors.message}
                     rules={{ required: true }}
+                    handleClick={() => clickSubmit()}
                 />
-
-                {/* <div className="sm:col-span-3">
-                    <button type="submit" className="btn btn-primary w-full">
-                        {loading && <span className="loading loading-spinner"></span>}
-                        {loading ? "Loading" : "Submit"}
-                    </button>
-                </div> */}
             </div>
             {error && (
                 <Alert type="alert" delay={5000} onClose={() => setError(false)}>

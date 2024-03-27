@@ -29,7 +29,7 @@ const ChatScreen = async ({ params }: { params: { slug: string } }) => {
     return (
         <>
             <div className="mb-6">
-                <h2 className="text-2xl font-bold text-gray-800">General111</h2>
+                <h2 className="text-2xl font-bold text-gray-800">General</h2>
             </div>
             <div className="flex flex-col flex-1">
                 {/* Chat Messages */}

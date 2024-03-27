@@ -13,7 +13,9 @@ const Http = async (url: string, method: Method, body?: any, extra?: Object) => 
         session = await getSession();
     }
 
-    return await fetch(process.env.NEXT_PUBLIC_API_DOMAIN + url, {
+    const domain = typeof window === "undefined" ? process.env.NEXT_PUBLIC_API_DOMAIN : process.env.NEXT_PUBLIC_FRONT_API_DOMAIN;
+
+    return await fetch(domain + url, {
         method,
         headers: {
             Accept: "application/json",

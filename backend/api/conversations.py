@@ -64,7 +64,7 @@ async def create(
     user_id = current_user.id
     update = {
         "slug": str(uuid.uuid4()),
-        "excerpt": "This is a conversation between two people.",
+        "excerpt": data.message[:50],
         "user_id": user_id,
     }
     try:

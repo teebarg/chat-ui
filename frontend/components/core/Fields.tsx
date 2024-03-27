@@ -134,7 +134,7 @@ export function MutiSelectField({ name, label, className, options, control, defa
     );
 }
 
-export function TextAreaField({ name, register, rules, error, ...props }: FieldProps) {
+export function TextAreaField({ name, register, rules, error, handleClick, ...props }: FieldProps) {
     let id = useId();
     const formRules: Rules = {};
     const { required } = rules || {};
@@ -156,6 +156,7 @@ export function TextAreaField({ name, register, rules, error, ...props }: FieldP
                     {...register(name, formRules)}
                 ></textarea>
                 <button
+                    onClick={handleClick}
                     disabled={error}
                     className="absolute bottom-1.5 right-2 rounded-lg border border-black bg-black p-0.5 text-white transition-colors enabled:bg-black disabled:text-gray-400 disabled:opacity-10 md:bottom-3 md:right-3"
                 >
@@ -164,9 +165,9 @@ export function TextAreaField({ name, register, rules, error, ...props }: FieldP
                             <path
                                 d="M7 11L12 6L17 11M12 18V7"
                                 stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                             ></path>
                         </svg>
                     </span>
