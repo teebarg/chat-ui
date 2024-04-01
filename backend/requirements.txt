@@ -5,7 +5,7 @@ passlib==1.7.4
 python-jose==3.3.0
 PyJWT==2.5.0
 black==23.9.1
-flake8==6.1.0
+flake8==7.0.0
 isort==5.13.2
 mypy==1.5.1
 pre-commit==3.6.2
