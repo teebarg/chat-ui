@@ -93,7 +93,7 @@ export default async function ChatLayout({ children }: { children: React.ReactNo
 
                 {/* Chat Area */}
                 <div className="flex-1 bg-white p-6 flex flex-col overflow-auto max-h-screen">
-                    <div className="max-w-5xl mx-auto flex-1 flex flex-col">{children}</div>
+                    <div className="max-w-5xl w-full mx-auto flex-1 flex flex-col">{children}</div>
                 </div>
             </div>
         </div>

@@ -3,7 +3,8 @@
 from typing import Any
 import logging
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, BackgroundTasks
+from fastapi.responses import StreamingResponse
 from sqlalchemy.exc import IntegrityError
 
 import uuid
@@ -19,6 +20,7 @@ router = APIRouter()
 @router.get("/", response_model=dict[str, Any])
 async def index(
     db: deps.SessionDep,
+    current_user: deps.CurrentUser,
     name: str = "",
     page: int = Query(default=1, gt=0),
     per_page: int = Query(default=20, le=100),
@@ -51,7 +53,6 @@ async def show(conversation: deps.CurrentConversation):
     """
     return conversation
 
-
 @router.post("/", response_model=ConversationOut, status_code=201)
 async def create(
     data: schemas.ConversationCreate,
@@ -77,23 +78,6 @@ async def create(
                 "user_id": user_id,
             },
         )
-
-        # Get the response from OpenAI
-        try:
-            oai_message = crud.conversation.call_openai(messages=conversation.messages)
-            crud.message.create(
-                db=db,
-                obj_in={
-                    "message": oai_message,
-                    "ai": True,
-                    "conversation_id": conversation.id,
-                    "user_id": user_id,
-                },
-            )
-            return conversation
-
-        except Exception as e:
-            logging.error(f"Error processing conversation: {e}")
 
         return conversation
     except IntegrityError as e:
@@ -123,8 +107,8 @@ async def update(
         raise HTTPException(status_code=500, detail=f"Error updating Conversation, {e}")
 
 
-@router.put("/{slug}/message", response_model=ConversationOut)
-async def patch(
+@router.patch("/{slug}/message", response_model=ConversationOut)
+async def add_message(
     payload: schemas.ConversationCreate,
     db: deps.SessionDep,
     current_user: deps.CurrentUser,
@@ -142,22 +126,6 @@ async def patch(
                 "user_id": current_user.id,
             },
         )
-        # Get the response from OpenAI
-        try:
-            oai_message = crud.conversation.call_openai(messages=conversation.messages)
-            crud.message.create(
-                db=db,
-                obj_in={
-                    "message": oai_message,
-                    "ai": True,
-                    "conversation_id": conversation.id,
-                    "user_id": current_user.id,
-                },
-            )
-            return conversation
-
-        except Exception as e:
-            logging.error(f"Error getting response from ai: {e}")
         return conversation
     except IntegrityError as e:
         raise HTTPException(
@@ -165,6 +133,36 @@ async def patch(
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error updating Conversation, {e}")
+
+
+@router.get("/{slug}/ai", status_code=201)
+async def call_ai(
+    db: deps.SessionDep,
+    conversation: deps.CurrentConversation,
+    background_tasks: BackgroundTasks
+):
+    """
+    Create a new Conversation.
+    """
+    def job(message: str):
+        crud.message.create(
+            db=db,
+            obj_in={
+                "message": message,
+                "ai": True,
+                "conversation_id": conversation.id,
+                "user_id": conversation.user_id,
+            },
+        )
+    try:
+        # Get the response from OpenAI
+        return StreamingResponse(crud.conversation.call_openai(messages=conversation.messages, job=job, background_tasks=background_tasks))
+    except IntegrityError as e:
+        raise HTTPException(
+            status_code=422, detail=f"An error occurred, {e.orig.pgerror}"
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred, {e}")
 
 
 @router.delete("/{slug}", response_model=ConversationOut)

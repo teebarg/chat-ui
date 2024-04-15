@@ -8,6 +8,8 @@ import { mdTextToHtml } from "@/lib/utils";
 import Avatar from "@/components/core/Avatar";
 import ai from "@/public/ai.png";
 import ChatInputForm from "@/components/forms/ChatInputForm";
+import AIContent from "@/components/AIContent";
+import ScrollToBottom from "@/components/ScrollToBottom";
 
 async function getData(slug: string) {
     const { ok, status, data } = await GET(`/conversations/${slug}`, "conversation");
@@ -25,6 +27,12 @@ async function getData(slug: string) {
 
 const ChatScreen = async ({ params }: { params: { slug: string } }) => {
     const { messages, error }: { messages: Message[]; error: boolean } = await getData(params.slug);
+    // sort messages by id
+    messages.sort((a, b) => a.id - b.id);
+
+    // check if the last message is from the AI
+    const lastMessage = messages[messages.length - 1];
+    const lastMessageIsAI = lastMessage.ai;
 
     if (error) {
         return <ErrorPage></ErrorPage>;
@@ -36,7 +44,7 @@ const ChatScreen = async ({ params }: { params: { slug: string } }) => {
             </div>
             <div className="flex flex-col flex-1 mt-14">
                 {/* Chat Messages */}
-                <div className="flex-1 overflow-y-auto">
+                <ScrollToBottom>
                     {messages.map((message: Message, key: number) => (
                         <div key={key} className="mb-8 flex gap-4">
                             <div className="w-10">
@@ -53,9 +61,12 @@ const ChatScreen = async ({ params }: { params: { slug: string } }) => {
                             </div>
                         </div>
                     ))}
-                </div>
+                    {/* AI Content */}
+                    {!lastMessageIsAI && <AIContent slug={params.slug}></AIContent>}
+                    {/* AI Content Ends */}
+                </ScrollToBottom>
                 <div className="fixed bottom-0 bg-white pb-8 max-w-5xl w-full">
-                    <ChatInputForm></ChatInputForm>
+                    <ChatInputForm slug={params.slug}></ChatInputForm>
                 </div>
             </div>
         </div>

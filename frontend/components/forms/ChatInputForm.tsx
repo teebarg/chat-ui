@@ -30,7 +30,8 @@ export default function ChatInputForm({ slug }: { slug?: string }) {
         const body = JSON.stringify(data);
         try {
             const path = slug ? `/conversations/${slug}/message` : `/conversations`;
-            const res = await Http(`${path}`, "POST", body);
+            const method = slug ? "PATCH" : "POST";
+            const res = await Http(`${path}`, method, body);
             const data = await res.json();
             setLoading(false);
             if (res.ok) {
@@ -50,6 +51,7 @@ export default function ChatInputForm({ slug }: { slug?: string }) {
             }
         } catch (error) {
             setErrorMessage("An error occurred, please contact the administrator");
+        } finally {
             setLoading(false);
         }
     };

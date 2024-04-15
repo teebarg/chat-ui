@@ -3,6 +3,8 @@
 // import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
+import AI from "@/public/AI-Hero.png";
+import Image from "next/image";
 
 // import { ArrowPathIcon, CloudArrowUpIcon, FingerPrintIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 
@@ -33,7 +35,7 @@ const HomeComponent = ({ session }: { session: any }) => {
                         </Link>
                     </div>
                     <div className="md:w-1/2 animate-fade-in-up animation-delay-900">
-                        <img src="/hero-illustration.svg" alt="Hero Illustration" className="mx-auto" />
+                        <Image src={AI} alt="Hero Illustration" className="mx-auto" />
                     </div>
                 </div>
             </div>
@@ -42,7 +44,7 @@ const HomeComponent = ({ session }: { session: any }) => {
             <div className="container mx-auto px-4 py-24">
                 <div className="flex flex-col md:flex-row items-center justify-between">
                     <div className="md:w-1/2 mb-12 md:mb-0 animate-fade-in-left">
-                        <img src="/about-illustration.svg" alt="About Illustration" className="mx-auto" />
+                        <Image src={AI} alt="About Illustration" className="mx-auto" />
                     </div>
                     <div className="md:w-1/2 animate-fade-in-right">
                         <h2 className="text-4xl font-bold mb-6">About Us</h2>
@@ -61,21 +63,21 @@ const HomeComponent = ({ session }: { session: any }) => {
                     <h2 className="text-4xl font-bold text-center mb-12 animate-fade-in-up">Features</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div className="bg-white rounded-lg shadow-md p-8 animate-fade-in-up animation-delay-300">
-                            <img src="/feature-1.svg" alt="Feature 1" className="mx-auto mb-6" />
+                            <Image src={AI} alt="Feature 1" className="mx-auto mb-6" />
                             <h3 className="text-xl font-bold mb-4">Natural Conversations</h3>
                             <p className="text-gray-700">
                                 Our AI chat assistant can engage in natural, human-like conversations, understanding context and intent.
                             </p>
                         </div>
                         <div className="bg-white rounded-lg shadow-md p-8 animate-fade-in-up animation-delay-600">
-                            <img src="/feature-2.svg" alt="Feature 2" className="mx-auto mb-6" />
+                            <Image src={AI} alt="Feature 2" className="mx-auto mb-6" />
                             <h3 className="text-xl font-bold mb-4">Multi-Purpose</h3>
                             <p className="text-gray-700">
                                 From task assistance to creative writing, our AI chat assistant can handle a wide range of use cases.
                             </p>
                         </div>
                         <div className="bg-white rounded-lg shadow-md p-8 animate-fade-in-up animation-delay-900">
-                            <img src="/feature-3.svg" alt="Feature 3" className="mx-auto mb-6" />
+                            <Image src={AI} alt="Feature 3" className="mx-auto mb-6" />
                             <h3 className="text-xl font-bold mb-4">Continuous Learning</h3>
                             <p className="text-gray-700">
                                 Our AI chat assistant is constantly learning and improving, providing more accurate and relevant responses over time.
