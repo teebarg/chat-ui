@@ -2,6 +2,7 @@ from sqlmodel import Session, select
 
 import crud
 from core.config import settings
+from core.logging import logger
 from models.user import User, UserCreate  # noqa: F401
 
 # make sure all SQLModel models are imported (app.models) before initializing DB
@@ -30,4 +31,4 @@ def init_db(session: Session, auth) -> None:
                 password=settings.FIRST_SUPERUSER_PASSWORD,
             )
         except Exception as e:
-            print(e)
+            logger.error(e)

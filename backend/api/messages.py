@@ -17,6 +17,7 @@ router = APIRouter()
 @router.get("/", response_model=dict[str, Any])
 async def index(
     db: deps.SessionDep,
+    current_user: deps.CurrentUser,
     name: str = "",
     page: int = Query(default=1, gt=0),
     per_page: int = Query(default=20, le=100),
@@ -33,7 +34,7 @@ async def index(
     queries = {"name": name}
 
     messages = crud.message.get_multi(
-        db=db, queries=queries, per_page=per_page, offset=(page - 1) * per_page
+        db=db, queries=queries, current_user=current_user, per_page=per_page, offset=(page - 1) * per_page
     )
     return {
         "messages": messages,

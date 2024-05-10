@@ -66,9 +66,10 @@ export default function ChatInputForm({ slug }: { slug?: string }) {
                 <TextAreaField
                     name="message"
                     placeholder="Ex. Message ai....."
+                    loading={loading}
                     register={register}
                     error={errors.message}
-                    rules={{ required: true }}
+                    rules={{ required: true, minLength: 1 }}
                     handleClick={() => clickSubmit()}
                 />
             </div>

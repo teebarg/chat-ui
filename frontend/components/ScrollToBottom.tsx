@@ -1,7 +1,7 @@
 // ScrollToBottom.tsx
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
 interface Props {
     children: React.ReactNode;
@@ -10,30 +10,46 @@ interface Props {
 const ScrollToBottom: React.FC<Props> = ({ children }) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-    const [, setShouldScroll] = useState<boolean>(false);
-
-    const onWheel = (event: any) => {
-        // console.dir(event);
-        const descElement = event.target;
-        setShouldScroll(false);
-        // Continue scrolling if we hit the bottom of the div
-        if (descElement.scrollTop + descElement.clientHeight >= descElement.scrollHeight - 5) {
-            setShouldScroll(true);
-        }
-    };
-
     useEffect(() => {
         const scrollContainer = scrollContainerRef.current;
-        console.dir(scrollContainer);
-        console.log(scrollContainer?.scrollHeight, scrollContainer?.scrollTop, scrollContainer?.clientHeight, scrollContainer?.offsetHeight);
-
+        // Make sure the element exists
         if (scrollContainer) {
-            scrollContainer.scrollTop = scrollContainer?.scrollHeight ?? 0;
+            // Define the callback function that will be called when mutations are observed.
+            /* eslint-disable no-undef */
+            const mutationCallback: MutationCallback = (mutationsList: any) => {
+                for (const mutation of mutationsList) {
+                    if (mutation.type === "childList") {
+                        console.log("A child node has been added or removed.");
+                        if (scrollContainer) {
+                            scrollContainer.scrollTop = scrollContainer?.scrollHeight ?? 0;
+                        }
+                    } else if (mutation.type === "attributes") {
+                        console.log("Attributes have changed.");
+                    }
+                }
+            };
+
+            // Create a MutationObserver instance
+            const observer = new MutationObserver(mutationCallback);
+
+            // Configure the observer to listen for specific types of mutations
+            const observerOptions = {
+                childList: true, // Observe direct children additions/removals
+                subtree: true, // Observe all descendants
+                characterData: true, // Observe text changes
+                attributes: true, // Observe attribute changes
+            };
+
+            // Start observing the div element for configured mutations
+            observer.observe(scrollContainerRef.current, observerOptions);
+
+            // Disconnect the observer when the component unmounts
+            return () => observer.disconnect();
         }
-    }, [children]);
+    }, []);
 
     return (
-        <div ref={scrollContainerRef} style={{ height: "300px", overflowY: "auto" }} onWheel={onWheel}>
+        <div ref={scrollContainerRef} className="flex-1 flex flex-col pt-4 pb-2 overflow-y-auto">
             {children}
         </div>
     );

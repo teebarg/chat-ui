@@ -38,36 +38,34 @@ const ChatScreen = async ({ params }: { params: { slug: string } }) => {
         return <ErrorPage></ErrorPage>;
     }
     return (
-        <div className="max-h-screen overflow-y-auto relative pb-12">
-            <div className="fixed max-w-5xl w-full top-0 bg-white py-4 z-10">
-                <h2 className="text-2xl font-bold text-gray-800">Conversation</h2>
+        <div className="flex-1 relative flex flex-col px-6 max-h-screen">
+            <div className="w-full py-4">
+                <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Conversation</h2>
             </div>
-            <div className="flex flex-col flex-1 mt-14">
-                {/* Chat Messages */}
-                <ScrollToBottom>
-                    {messages.map((message: Message, key: number) => (
-                        <div key={key} className="mb-8 flex gap-4">
-                            <div className="w-10">
-                                {message.ai ? (
-                                    <div className="h-10 w-10 rounded-full relative overflow-hidden border border-solid">
-                                        <Image className="" src={ai} alt="Avatar" fill />
-                                    </div>
-                                ) : (
-                                    <Avatar />
-                                )}
-                            </div>
-                            <div className="flex-1 overflow-x-auto">
-                                <div dangerouslySetInnerHTML={{ __html: mdTextToHtml(message.message) }} />
-                            </div>
+            {/* Chat Messages */}
+            <ScrollToBottom>
+                {messages.map((message: Message, key: number) => (
+                    <div key={key} className="mb-8 flex gap-4">
+                        <div className="w-10">
+                            {message.ai ? (
+                                <div className="h-10 w-10 rounded-full relative overflow-hidden border border-solid">
+                                    <Image className="" src={ai} alt="Avatar" fill />
+                                </div>
+                            ) : (
+                                <Avatar />
+                            )}
                         </div>
-                    ))}
-                    {/* AI Content */}
-                    {!lastMessageIsAI && <AIContent slug={params.slug}></AIContent>}
-                    {/* AI Content Ends */}
-                </ScrollToBottom>
-                <div className="fixed bottom-0 bg-white pb-8 max-w-5xl w-full">
-                    <ChatInputForm slug={params.slug}></ChatInputForm>
-                </div>
+                        <div className="flex-1 overflow-x-auto">
+                            <div dangerouslySetInnerHTML={{ __html: mdTextToHtml(message.message) }} />
+                        </div>
+                    </div>
+                ))}
+                {/* AI Content */}
+                {!lastMessageIsAI && <AIContent slug={params.slug}></AIContent>}
+            </ScrollToBottom>
+            <div className="pb-8">
+                <ChatInputForm slug={params.slug}></ChatInputForm>
+                <p className="text-xs text-center text-gray-400 font-semibold mt-1">AI can make mistakes. Consider checking important information.</p>
             </div>
         </div>
     );

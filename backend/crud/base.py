@@ -10,6 +10,8 @@ ModelType = TypeVar("ModelType", bound=Any)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
 UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 
+from models.user import User
+
 
 class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     def __init__(self, model: Type[ModelType]):
@@ -29,9 +31,12 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         queries: dict,
         per_page: int,
         offset: int,
+        current_user: User | None = None,
         sort: str = "desc",
     ) -> list[ModelType]:
         statement = select(self.model)
+        if current_user:
+            statement = statement.where(self.model.user_id == current_user.id)
         for key, value in queries.items():
             if value and key == "name":
                 statement = statement.where(self.model.name.like(f"%{value}%"))

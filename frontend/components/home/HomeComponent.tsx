@@ -1,19 +1,16 @@
 "use client";
 
-// import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
 import AI from "@/public/AI-Hero.png";
 import Image from "next/image";
 
-// import { ArrowPathIcon, CloudArrowUpIcon, FingerPrintIcon, LockClosedIcon } from "@heroicons/react/24/outline";
-
 const HomeComponent = ({ session }: { session: any }) => {
     const isAuthenticated = session && session.user;
-    const link = isAuthenticated ? "/chat" : "/login";
+    const link = "/chat";
     const linkName = isAuthenticated ? "Chat Now" : "Get Started";
     return (
-        <div className="bg-gray-100">
+        <div className="text-gray-700">
             <Head>
                 <title>AI Chat App</title>
                 <meta name="description" content="Experience the power of AI-powered conversations" />
@@ -48,7 +45,7 @@ const HomeComponent = ({ session }: { session: any }) => {
                     </div>
                     <div className="md:w-1/2 animate-fade-in-right">
                         <h2 className="text-4xl font-bold mb-6">About Us</h2>
-                        <p className="text-lg text-gray-700 mb-8">
+                        <p className="text-lg mb-8">
                             At AI Chat App, we are dedicated to providing cutting-edge AI technology for effortless communication. Our team of experts
                             has developed a powerful chat assistant that combines natural language processing and machine learning to deliver
                             intelligent and contextual responses.
@@ -65,21 +62,17 @@ const HomeComponent = ({ session }: { session: any }) => {
                         <div className="bg-white rounded-lg shadow-md p-8 animate-fade-in-up animation-delay-300">
                             <Image src={AI} alt="Feature 1" className="mx-auto mb-6" />
                             <h3 className="text-xl font-bold mb-4">Natural Conversations</h3>
-                            <p className="text-gray-700">
-                                Our AI chat assistant can engage in natural, human-like conversations, understanding context and intent.
-                            </p>
+                            <p>Our AI chat assistant can engage in natural, human-like conversations, understanding context and intent.</p>
                         </div>
                         <div className="bg-white rounded-lg shadow-md p-8 animate-fade-in-up animation-delay-600">
                             <Image src={AI} alt="Feature 2" className="mx-auto mb-6" />
                             <h3 className="text-xl font-bold mb-4">Multi-Purpose</h3>
-                            <p className="text-gray-700">
-                                From task assistance to creative writing, our AI chat assistant can handle a wide range of use cases.
-                            </p>
+                            <p>From task assistance to creative writing, our AI chat assistant can handle a wide range of use cases.</p>
                         </div>
                         <div className="bg-white rounded-lg shadow-md p-8 animate-fade-in-up animation-delay-900">
                             <Image src={AI} alt="Feature 3" className="mx-auto mb-6" />
                             <h3 className="text-xl font-bold mb-4">Continuous Learning</h3>
-                            <p className="text-gray-700">
+                            <p>
                                 Our AI chat assistant is constantly learning and improving, providing more accurate and relevant responses over time.
                             </p>
                         </div>
@@ -91,7 +84,7 @@ const HomeComponent = ({ session }: { session: any }) => {
             <div className="container mx-auto px-4 py-24">
                 <div className="text-center animate-fade-in-up">
                     <h2 className="text-4xl font-bold mb-6">Join the Future of Conversations</h2>
-                    <p className="text-lg text-gray-700 mb-8">Experience the power of our AI chat assistant today.</p>
+                    <p className="text-lg mb-8">Experience the power of our AI chat assistant today.</p>
                     <Link href={link} className="px-8 py-3 font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-700">
                         {linkName}
                     </Link>

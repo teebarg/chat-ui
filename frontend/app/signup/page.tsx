@@ -11,8 +11,8 @@ export default function Login() {
                 <div className="">
                     <div>
                         <Image className="h-12 w-auto" src={Logo} alt="Company" />
-                        <h2 className="mt-6 text-xl font-semibold tracking-tight text-gray-900">Signup for your free trial</h2>
-                        <p className="mt-2 text-sm leading-6 text-gray-500">
+                        <h2 className="mt-6 text-xl font-semibold tracking-tight">Signup for your free trial</h2>
+                        <p className="mt-2 text-sm leading-6">
                             Already a member?
                             <Link href="/login" className="font-semibold text-indigo-600 hover:text-indigo-500 ml-2">
                                 Login here

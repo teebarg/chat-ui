@@ -31,7 +31,7 @@ async function refreshAccessToken(token) {
             refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
         };
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return token;
     }
 }
@@ -67,7 +67,7 @@ export const authOptions = {
                     }
                     return null;
                 } catch (error) {
-                    console.log(error);
+                    console.error(error);
                     return null;
                 }
             },

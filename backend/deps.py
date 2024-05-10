@@ -1,6 +1,5 @@
 from typing import Annotated, Any, Generator
 
-import logging
 import firebase_admin
 import pyrebase
 import requests
@@ -12,6 +11,7 @@ from sqlmodel import Session
 import crud
 import schemas
 from core.config import settings
+from core.logging import logger
 from db.engine import engine
 from models.user import User
 from models.conversation import Conversation
@@ -41,7 +41,7 @@ def get_auth() -> Generator:
         # Get a reference to the auth service
         yield firebase.auth()
     except Exception as e:
-        logging.error(f"An error occurred while trying to initialize auth. Error: {e}")
+        logger.error(f"An error occurred while trying to initialize auth. Error: {e}")
         raise HTTPException(
             status_code=int(e.status_code)
             if hasattr(e, "status_code")
@@ -51,7 +51,7 @@ def get_auth() -> Generator:
             else f"An error occurred while trying to initialize auth, {e}",
         )
     finally:
-        print("auth closed")
+        logger.info("auth closed")
 
 
 def get_storage() -> Generator:
@@ -65,9 +65,9 @@ def get_storage() -> Generator:
         # Get a reference to the bucket
         yield storage.bucket()
     except Exception as e:
-        print(f"storage init error, {e}")
+        logger.error(f"storage init error, {e}")
     finally:
-        print("storage closed")
+        logger.debug("storage closed")
 
 
 def get_current_user(
@@ -89,13 +89,14 @@ def get_current_user(
 
         else:
             raise HTTPException(status_code=404, detail="User not found")
-    except requests.exceptions.HTTPError:
+    except requests.exceptions.HTTPError as err:
+        logger.error(f"Get current user error, ${err}")
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Could not validate credentials",
         )
     except Exception as e:
-        print(f"Get current user error, ${e}")
+        logger.error(f"Get current user error, ${e}")
         if "Token expired" in str(e):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
@@ -134,6 +135,11 @@ def get_conversation_path_param(
     slug: str, db: SessionDep, current_user: CurrentUser
 ) -> Conversation:
     if conversation := crud.conversation.get_by_slug(db=db, slug=slug):
+        # if current user is not a participant in the conversation, raise unauthorized
+        if current_user.id != conversation.user_id:
+            raise HTTPException(
+                status_code=401, detail="Unauthorized to access this conversation."
+            )
         return conversation
     raise HTTPException(status_code=404, detail="Conversation not found.")
 
@@ -142,6 +148,10 @@ def get_message_path_param(
     id: str, db: SessionDep, current_user: CurrentUser
 ) -> Message:
     if message := crud.message.get(db=db, id=id):
+        if current_user.id != message.user_id:
+            raise HTTPException(
+                status_code=401, detail="Unauthorized to access this message."
+            )
         return message
     raise HTTPException(status_code=404, detail="Message not found.")
 

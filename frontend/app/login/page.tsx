@@ -10,9 +10,11 @@ export default function Login() {
             <div className="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
                 <div className="mx-auto w-full max-w-sm lg:w-96">
                     <div>
-                        <Image className="w-24" src={Logo} alt="Company" />
-                        <h2 className="mt-6 text-xl font-semibold tracking-tight text-gray-900">Sign in to your account!</h2>
-                        <p className="mt-2 text-sm leading-6 text-gray-500">
+                        <Link href="/">
+                            <Image className="w-24" src={Logo} alt="Company" />
+                        </Link>
+                        <h2 className="mt-6 text-xl font-semibold tracking-tight">Sign in to your account!</h2>
+                        <p className="mt-2 text-sm leading-6">
                             Not a member?
                             <Link href="/signup" className="ml-2 font-semibold text-indigo-600 hover:text-indigo-500">
                                 Start a 14 day free trial

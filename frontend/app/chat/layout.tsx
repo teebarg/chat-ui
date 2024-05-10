@@ -26,12 +26,15 @@ export default async function ChatLayout({ children }: { children: React.ReactNo
         return <ErrorPage></ErrorPage>;
     }
     return (
-        <div className="flex flex-col h-screen bg-gray-100">
+        <div className="flex flex-col">
             <div className="flex flex-1">
                 {/* Sidebar */}
-                <div className="bg-white border-r border-gray-200 w-64 lg:w-80 p-4 overflow-y-auto max-h-screen relative">
-                    <Link href={`/chat`} className="fixed -m-4 px-4 py-2 w-64 lg:w-80 flex items-center justify-between hover:bg-gray-100 bg-white">
-                        <h2 className="text-lg font-semibold text-gray-800">New Chat</h2>
+                <div className="border-r border-gray-200 w-64 lg:w-80 p-4 overflow-y-auto max-h-screen h-screen relative">
+                    <Link
+                        href={`/chat`}
+                        className="fixed -m-4 px-4 py-2 w-64 lg:w-80 flex items-center justify-between hover:bg-gray-100 dark:hover:bg-slate-900 bg-inherit"
+                    >
+                        <h2 className="text-lg font-semibold">New Chat</h2>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="icon-md">
                             <path
                                 fillRule="evenodd"
@@ -92,7 +95,7 @@ export default async function ChatLayout({ children }: { children: React.ReactNo
                 </div>
 
                 {/* Chat Area */}
-                <div className="flex-1 bg-white p-6 flex flex-col overflow-auto max-h-screen">
+                <div className="flex-1 px-6 flex flex-col">
                     <div className="max-w-5xl w-full mx-auto flex-1 flex flex-col">{children}</div>
                 </div>
             </div>

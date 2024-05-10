@@ -1,7 +1,6 @@
 # api/conversation.py
 
 from typing import Any
-import logging
 
 from fastapi import APIRouter, HTTPException, Query, BackgroundTasks
 from fastapi.responses import StreamingResponse
@@ -37,7 +36,7 @@ async def index(
     queries = {"name": name}
 
     conversations = crud.conversation.get_multi(
-        db=db, queries=queries, per_page=per_page, offset=(page - 1) * per_page
+        db=db, queries=queries, current_user=current_user, per_page=per_page, offset=(page - 1) * per_page
     )
     return {
         "conversations": conversations,
